@@ -5,34 +5,28 @@ import { UsdcTransfer } from './type/usdc-transfer.types';
 
 @Injectable()
 export class BlockchainService {
-  private provider: JsonRpcProvider;
-  private usdcInterface: Interface;
-  private transferEventTopic: string;
+  private readonly provider: JsonRpcProvider;
 
   constructor(private readonly configurationService: ConfigurationService) {
     this.provider = new JsonRpcProvider(
       this.configurationService.ethereum.rpcUrl,
     );
-    this.usdcInterface = new Interface([
-      'event Transfer(address indexed from, address indexed to, uint256 value)',
-    ]);
-    const transferEvent = this.usdcInterface.getEvent('Transfer');
-    if (!transferEvent) {
-      throw new Error('Transfer event not found in interface');
-    }
-    this.transferEventTopic = transferEvent.topicHash;
   }
 
   async getUsdcTransfers(blockNumber: number): Promise<UsdcTransfer[]> {
+    const usdcInterface = new Interface([
+      'event Transfer(address indexed from, address indexed to, uint256 value)',
+    ]);
+
     const logs = await this.provider.getLogs({
       address: this.configurationService.ethereum.usdcAddress,
       fromBlock: blockNumber,
       toBlock: blockNumber,
-      topics: [this.transferEventTopic],
+      topics: [usdcInterface.getEvent('Transfer')!.topicHash],
     });
 
     return logs.map((log) => {
-      const parsed = this.usdcInterface.parseLog(log);
+      const parsed = usdcInterface.parseLog(log);
 
       if (!parsed) {
         throw new Error('Failed to parse log');

@@ -1,4 +1,10 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { objectTransformer } from '../../common/types/object-transformer';
 import { BlockchainService } from '../domain/blockchain.service';
@@ -11,8 +17,7 @@ export class BlockchainEthController {
 
   @Get('usdc/:blockNumber')
   async getUsdcTransfers(
-    // TODO: ParseIntPipe is not the fastest validation but it is core NestJS validation
-    @Param('blockNumber') blockNumber: number,
+    @Param('blockNumber', ParseIntPipe) blockNumber: number,
   ): Promise<UsdcTransferListResponse> {
     const transfers =
       await this.blockchainService.getUsdcTransfers(blockNumber);
