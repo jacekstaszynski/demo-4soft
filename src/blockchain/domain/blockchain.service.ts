@@ -79,7 +79,7 @@ export class BlockchainService {
       typeof value !== 'string' &&
       typeof value !== 'bigint'
     ) {
-      throw new Error('Value is not a number');
+      throw new Error('Wrong value when parsing usdc value');
     }
 
     const valueString = String(value);
