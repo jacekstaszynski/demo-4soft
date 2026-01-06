@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import {
   Interface,
   JsonRpcProvider,
@@ -6,6 +6,7 @@ import {
   type LogDescription,
 } from 'ethers';
 import { ConfigurationService } from '../../config/configuration.service';
+import { DomainException } from '../../error-handling/domain-exception';
 import { UsdcTransfer } from './type/usdc-transfer.types';
 
 @Injectable()
@@ -38,12 +39,23 @@ export class BlockchainService {
       );
 
       if (errors.length > 0) {
-        throw new Error('Errors during parsing logs: ' + errors.join(', '));
+        throw new DomainException(
+          'Errors during parsing logs: ' + errors.join(', '),
+          HttpStatus.BAD_REQUEST,
+          BlockchainService.name,
+        );
       }
 
       return transfers;
     } catch (error) {
-      throw new Error('Error during getting usdc transfers: ' + error);
+      if (error instanceof DomainException) {
+        throw error;
+      }
+      throw new DomainException(
+        'Error during getting usdc transfers: ' + error,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        BlockchainService.name,
+      );
     }
   }
 
@@ -80,7 +92,11 @@ export class BlockchainService {
       typeof value !== 'string' &&
       typeof value !== 'bigint'
     ) {
-      throw new Error('Wrong value when parsing usdc value');
+      throw new DomainException(
+        'Wrong value when parsing usdc value',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        BlockchainService.name,
+      );
     }
 
     const valueString = String(value);

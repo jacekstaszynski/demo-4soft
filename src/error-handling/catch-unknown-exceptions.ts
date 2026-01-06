@@ -1,6 +1,5 @@
 import {
   ArgumentsHost,
-  Catch,
   ExceptionFilter,
   HttpStatus,
   Logger,
@@ -8,14 +7,17 @@ import {
 import { HttpAdapterHost } from '@nestjs/core';
 import { ErrorResponse } from './error-response';
 
-@Catch()
 export class CatchUnknownExceptions implements ExceptionFilter {
   private readonly logger: Logger = new Logger(CatchUnknownExceptions.name);
 
   constructor(private readonly host: HttpAdapterHost) {}
 
   catch(exception: any, host: ArgumentsHost) {
-    return this.handleException(host, exception, exception.status);
+    return this.handleException(
+      host,
+      exception,
+      exception?.status || HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   }
 
   private handleException(
