@@ -1,7 +1,3 @@
-# Demo NestJS Project
-
-A NestJS application with PostgreSQL, Prisma ORM, and JWT authentication, made for PWD recruitment process.
-
 ## Quick Start
 
 ### Installation
