@@ -63,6 +63,7 @@ export class BlockchainService {
     logs: Log[],
     usdcInterface: Interface,
   ): { transfers: UsdcTransfer[]; errors: string[] } {
+    // TODO: not sure if errors are overengineered, maybe just return transfers and throw error in controller
     const errors: string[] = [];
     const transfers: UsdcTransfer[] = [];
 
