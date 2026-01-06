@@ -1,25 +1,12 @@
-import { Expose } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { Expose, Type } from 'class-transformer';
+import { IsArray, ValidateNested } from 'class-validator';
+import { UsdcTransfer } from '../../domain/type/usdc-transfer.types';
 
-export class UsdcTransfer {
-  @Expose()
-  @IsString()
-  txHash: string;
-
-  @Expose()
-  @IsString()
-  from: string;
-
-  @Expose()
-  @IsString()
-  to: string;
-
-  @Expose()
-  @IsString()
-  value: string;
-}
-
+// TODO: validators are much more usefull in requests but we can use them also in resposnses
 export class UsdcTransferListResponse {
   @Expose()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => UsdcTransfer)
   transfers: UsdcTransfer[];
 }
