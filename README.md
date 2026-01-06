@@ -5,6 +5,12 @@ made for PWD recruitment process.
 
 ## Quick Start
 
+do
+
+```
+yarn install
+```
+
 Create `.env` file by copying `.env.example` and fill in the values.
 
 generate jwt token and pass it to postman:
@@ -22,6 +28,7 @@ https://etherscan.io/tx/0x0c0093106cb919958037a68aa3ce785a4c9a8ff430f4e49fd0c32a
 
 ## Improvements / Commnets
 
+- I would use docker if DB was there (in this case no need)
 - This repo was cloned from based one that is why history is long
 - There are a lot of TODO comments in the code to explain/suggest improvements.
 - Most of the code is over-engineered to demonstrate production-ready patterns. For such a small application, multiple layers and features are not strictly necessary.
