@@ -32,22 +32,24 @@ export class BlockchainService {
       });
 
       const errors: string[] = [];
+      const transfers: UsdcTransfer[] = [];
 
-      const transfers = logs.map((log) => {
+      logs.forEach((log) => {
         const parsed: LogDescription | null = usdcInterface.parseLog(log);
 
         if (!parsed) {
-          return errors.push(
-            'Failed to parse log with tx hash: ' + log.transactionHash,
+          errors.push(
+            `Failed to parse log with tx hash: ${log.transactionHash}`,
           );
+          return;
         }
 
-        return {
+        transfers.push({
           txHash: log.transactionHash,
           from: parsed.args[0],
           to: parsed.args[1],
           value: this.parseUsdcValue(parsed.args[2]),
-        };
+        });
       });
 
       if (errors.length > 0) {
