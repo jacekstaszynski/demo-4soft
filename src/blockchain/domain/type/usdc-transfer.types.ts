@@ -4,4 +4,3 @@ export interface UsdcTransfer {
   to: string;
   value: string;
 }
-
