@@ -17,6 +17,7 @@ export class BlockchainEthController {
 
   @Get('usdc/:blockNumber')
   async getUsdcTransfers(
+    // TODO: maybe more blockNumber would be needed
     @Param('blockNumber', ParseIntPipe) blockNumber: number,
   ): Promise<UsdcTransferListResponse> {
     const transfers =

@@ -18,6 +18,7 @@ export class BlockchainService {
     );
   }
 
+  //TODO: Maybe pagination would be needed if arrays are too long
   async getUsdcTransfers(blockNumber: number): Promise<UsdcTransfer[]> {
     try {
       const usdcInterface = new Interface([
@@ -46,7 +47,7 @@ export class BlockchainService {
     }
   }
 
-  private parseUsdcTransferLogs(
+  public parseUsdcTransferLogs(
     logs: Log[],
     usdcInterface: Interface,
   ): { transfers: UsdcTransfer[]; errors: string[] } {
@@ -72,7 +73,7 @@ export class BlockchainService {
     return { transfers, errors };
   }
 
-  private parseUsdcValue(value: unknown): string {
+  public parseUsdcValue(value: unknown): string {
     // TODO: adjust this validation, not sure what value is expected (from debug it looks like string but dont know if always)
     if (
       typeof value !== 'number' &&
