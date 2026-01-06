@@ -7,6 +7,12 @@ made for PWD recruitment process.
 
 Create `.env` file by copying `.env.example` and fill in the values.
 
+generate jwt token:
+
+```bash
+yarn generate-jwt john.doe@example.com
+```
+
 ## Improvements
 
 - Most of the code is over-engineered to demonstrate production-ready patterns. For such a small application, multiple layers and features are not strictly necessary.

@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "generate-jwt": "ts-node scripts/generate-jwt.ts",
+    "generate-jwt": "ts-node scripts/generate-jwt.ts john.doe@example.com ",
     "mint:token": "ts-node scripts/generate-jwt.ts"
   },
   "dependencies": {

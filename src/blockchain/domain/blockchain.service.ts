@@ -11,7 +11,7 @@ export class BlockchainService {
 
   constructor(private readonly configurationService: ConfigurationService) {
     this.provider = new JsonRpcProvider(
-      this.configurationService.ethereum.rpcUrl as string,
+      this.configurationService.ethereum.rpcUrl,
     );
     this.usdcInterface = new Interface([
       'event Transfer(address indexed from, address indexed to, uint256 value)',
