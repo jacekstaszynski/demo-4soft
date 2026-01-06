@@ -61,5 +61,49 @@ describe('BlockchainService', () => {
       expect(Array.isArray(transfers)).toBe(true);
       expect(transfers).toHaveLength(0);
     }, 30000);
+
+    // TODO: propably for such a tests i should create mocks in differetn test files
+    it('should throw error when parseUsdcTransferLogs returns errors', async () => {
+      const blockNumber = 1700000;
+      const mockErrors = [
+        'Failed to parse log with tx hash: 0x1234567890abcdef',
+        'Failed to parse log with tx hash: 0xabcdef1234567890',
+      ];
+      const mockTransfers: any[] = [];
+
+      const serviceAny = service as any;
+      const originalParseMethod =
+        serviceAny.parseUsdcTransferLogs.bind(service);
+
+      serviceAny.parseUsdcTransferLogs = jest.fn().mockReturnValue({
+        transfers: mockTransfers,
+        errors: mockErrors,
+      });
+
+      const mockLogs = [
+        {
+          transactionHash: '0x1234567890abcdef',
+          address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+          topics: [],
+          data: '0x',
+          blockNumber: blockNumber,
+        },
+      ];
+
+      serviceAny.provider.getLogs = jest.fn().mockResolvedValue(mockLogs);
+
+      try {
+        await service.getUsdcTransfers(blockNumber);
+        fail('Expected error to be thrown');
+      } catch (error: any) {
+        expect(error.message).toContain('Error during getting usdc transfers');
+        expect(error.message).toContain('Errors during parsing logs');
+        expect(error.message).toContain(mockErrors[0]);
+        expect(error.message).toContain(mockErrors[1]);
+      }
+
+      // Restore original method
+      serviceAny.parseUsdcTransferLogs = originalParseMethod;
+    });
   });
 });
