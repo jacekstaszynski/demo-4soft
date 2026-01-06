@@ -31,26 +31,10 @@ export class BlockchainService {
         topics: [usdcInterface.getEvent('Transfer')!.topicHash],
       });
 
-      const errors: string[] = [];
-      const transfers: UsdcTransfer[] = [];
-
-      logs.forEach((log) => {
-        const parsed: LogDescription | null = usdcInterface.parseLog(log);
-
-        if (!parsed) {
-          errors.push(
-            `Failed to parse log with tx hash: ${log.transactionHash}`,
-          );
-          return;
-        }
-
-        transfers.push({
-          txHash: log.transactionHash,
-          from: parsed.args[0],
-          to: parsed.args[1],
-          value: this.parseUsdcValue(parsed.args[2]),
-        });
-      });
+      const { transfers, errors } = this.parseUsdcTransferLogs(
+        logs,
+        usdcInterface,
+      );
 
       if (errors.length > 0) {
         throw new Error('Errors during parsing logs: ' + errors.join(', '));
@@ -60,6 +44,32 @@ export class BlockchainService {
     } catch (error) {
       throw new Error('Error during getting usdc transfers: ' + error);
     }
+  }
+
+  private parseUsdcTransferLogs(
+    logs: Log[],
+    usdcInterface: Interface,
+  ): { transfers: UsdcTransfer[]; errors: string[] } {
+    const errors: string[] = [];
+    const transfers: UsdcTransfer[] = [];
+
+    logs.forEach((log) => {
+      const parsed: LogDescription | null = usdcInterface.parseLog(log);
+
+      if (!parsed) {
+        errors.push(`Failed to parse log with tx hash: ${log.transactionHash}`);
+        return;
+      }
+
+      transfers.push({
+        txHash: log.transactionHash,
+        from: parsed.args[0],
+        to: parsed.args[1],
+        value: this.parseUsdcValue(parsed.args[2]),
+      });
+    });
+
+    return { transfers, errors };
   }
 
   private parseUsdcValue(value: unknown): string {
