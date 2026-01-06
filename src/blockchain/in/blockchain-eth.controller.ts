@@ -24,11 +24,4 @@ export class BlockchainEthController {
 
     return objectTransformer({ transfers }, UsdcTransferListResponse);
   }
-
-  @Get('find-usdc-block')
-  async findBlockWithUsdcTransfers(): Promise<{ blockNumber: number | null }> {
-    const blockNumber =
-      await this.blockchainService.findRecentBlockWithUsdcTransfers();
-    return { blockNumber };
-  }
 }
