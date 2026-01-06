@@ -30,7 +30,7 @@ export class BlockchainService {
       topics: [usdcInterface.getEvent('Transfer')!.topicHash],
     });
 
-    return logs.map((log) => {
+    const transfers = logs.map((log) => {
       const parsed: LogDescription | null = usdcInterface.parseLog(log);
 
       if (!parsed) {
@@ -40,12 +40,14 @@ export class BlockchainService {
       }
 
       return {
-        txHash: log.blockHash,
+        txHash: log.transactionHash,
         from: parsed.args[0],
         to: parsed.args[1],
-        value: parsed.args.value.t,
+        value: parsed.args[2].toString(),
       };
     });
+
+    return transfers;
   }
 
   async findRecentBlockWithUsdcTransfers(

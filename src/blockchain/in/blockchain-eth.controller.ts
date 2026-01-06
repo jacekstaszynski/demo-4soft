@@ -22,7 +22,7 @@ export class BlockchainEthController {
     const transfers =
       await this.blockchainService.getUsdcTransfers(blockNumber);
 
-    return objectTransformer(transfers, UsdcTransferListResponse);
+    return objectTransformer({ transfers }, UsdcTransferListResponse);
   }
 
   @Get('find-usdc-block')
