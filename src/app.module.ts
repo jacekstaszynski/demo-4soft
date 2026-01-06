@@ -2,19 +2,11 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 
 import { AuthModule } from './auth/auth.module';
+import { BlockchainModule } from './blockchain/blockchain.module';
 import { ConfigurationModule } from './config/configuration.module';
-import { PrismaModule } from './prisma/prisma.module';
-import { SessionModule } from './session/session.module';
-import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [
-    PrismaModule,
-    ConfigurationModule,
-    AuthModule,
-    UserModule,
-    SessionModule,
-  ],
+  imports: [ConfigurationModule, AuthModule, BlockchainModule],
   controllers: [AppController],
   providers: [],
 })

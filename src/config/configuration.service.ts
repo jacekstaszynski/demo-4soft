@@ -7,27 +7,26 @@ export class ConfigurationService {
   readonly port: number;
   readonly env: Env;
 
-  readonly database: {
-    url: string;
-    port: number;
-    name: string;
-    user: string;
-    password: string;
-  };
   readonly auth0: {
     secret: string;
   };
 
+  readonly ethereum: {
+    rpcUrl: string;
+    usdcAddress: string;
+  };
+
   constructor(private configService: ConfigService) {
+    this.port = this.configService.get('PORT') || 3000;
+    this.env = this.configService.get<Env>('ENV') || Env.LOCAL;
     this.auth0 = {
       secret: this.configService.getOrThrow('JWT_SECRET'),
     };
-    this.database = {
-      url: this.configService.getOrThrow('DB_URL'),
-      port: this.configService.getOrThrow('DB_PORT'),
-      name: this.configService.getOrThrow('DB_NAME'),
-      user: this.configService.getOrThrow('DB_USER'),
-      password: this.configService.getOrThrow('DB_PASSWORD'),
+    this.ethereum = {
+      rpcUrl:
+        this.configService.get('ETH_RPC_URL') ||
+        'https://eth-mainnet.g.alchemy.com/v2/YOUR_KEY',
+      usdcAddress: '0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     };
   }
 }
