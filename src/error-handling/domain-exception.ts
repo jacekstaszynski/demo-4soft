@@ -14,4 +14,3 @@ export class DomainException extends HttpException {
     this.timestamp = new Date();
   }
 }
-

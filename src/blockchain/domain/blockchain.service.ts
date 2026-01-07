@@ -19,7 +19,7 @@ export class BlockchainService {
     );
   }
 
-  //TODO: Maybe pagination would be needed if arrays are too long
+  //TODO: Maybe pagination + Caching (or DB storage) would be needed if arrays are too long
   async getUsdcTransfers(blockNumber: number): Promise<UsdcTransfer[]> {
     try {
       const usdcInterface = new Interface([
