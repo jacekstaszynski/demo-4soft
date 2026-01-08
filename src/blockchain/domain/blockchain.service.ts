@@ -48,9 +48,6 @@ export class BlockchainService {
 
       return transfers;
     } catch (error) {
-      if (error instanceof DomainException) {
-        throw error;
-      }
       throw new DomainException(
         'Error during getting usdc transfers: ' + error,
         HttpStatus.INTERNAL_SERVER_ERROR,

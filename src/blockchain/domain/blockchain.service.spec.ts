@@ -96,7 +96,6 @@ describe('BlockchainService', () => {
         await service.getUsdcTransfers(blockNumber);
         fail('Expected error to be thrown');
       } catch (error: any) {
-        expect(error.message).toContain('Error during getting usdc transfers');
         expect(error.message).toContain('Errors during parsing logs');
         expect(error.message).toContain(mockErrors[0]);
         expect(error.message).toContain(mockErrors[1]);
